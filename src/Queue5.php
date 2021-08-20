@@ -1,17 +1,18 @@
 <?php
 
 /**
- * Queue4
+ * Queue5
  * 
  * A first-in, first-out data structure
  */
-class Queue4
+class Queue5
 {
 
     /**
      * Maximum number if the items in the queue
      * @var integer
      */
+    public const MAX_ITEMS = 5;
 
     /**
      * Queue items
@@ -26,6 +27,10 @@ class Queue4
      */
     public function push($item)
     {
+        /* "static" is used bc late static bindings */
+        if ($this->getCount() == static::MAX_ITEMS) {
+            throw new QueueException('Queue is full');
+        }
         $this->items[] = $item;
     }
 
