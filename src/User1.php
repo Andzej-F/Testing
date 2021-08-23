@@ -6,7 +6,7 @@
  * A user of the system
  */
 
-class User
+class User1
 {
 
     /**
