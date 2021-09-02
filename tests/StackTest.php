@@ -1,4 +1,5 @@
 <?php
+/* Example 4.1 Using setUp() to create the stack fixture */
 
 declare(strict_types=1);
 
@@ -20,6 +21,16 @@ final class StackTest extends TestCase
 
     public function testPush(): void
     {
-        array_push
+        array_push($this->stack, 'foo');
+
+        $this->assertSame('foo', $this->stack[count($this->stack) - 1]);
+        $this->assertFalse(empty($this->stack));
+    }
+
+    public function testPop(): void
+    {
+        array_push($this->stack, 'foo');
+        $this->assertSame('foo', array_pop($this->stack));
+        $this->assertTrue(empty($this->stack));
     }
 }

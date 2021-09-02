@@ -18,6 +18,10 @@ class FunctionAddTest extends TestCase
     {
         $this->assertNotEquals(5, add(2, 2));
     }
+
+    public function testSomething(): void
+    {
+    }
     // public function testNumericValues()
     // {
     //     $this->assertIsNumeric('4');
