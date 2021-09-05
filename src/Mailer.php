@@ -6,11 +6,11 @@ use PhpParser\Node\Expr\FuncCall;
 
 class Mailer
 {
-    public function sendMessage($email, $message): bool
+    public function sendMessage($email, $message)
     {
         sleep(1);
 
-        echo 'send' . $message . ' to ' . $email;
+        echo 'send ' . $message . ' to ' . $email;
 
         return true;
     }
