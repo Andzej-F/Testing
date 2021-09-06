@@ -18,6 +18,8 @@ Double doesn’t have to behave exactly like the real DOC (depended-on component
 it merely has to provide the same API as the real one so that the SUT(system 
 under test) thinks it is the real one!
 
+$type = interface or class name
+
 The createStub($type), createMock($type), and getMockBuilder($type) methods 
 provided by PHPUnit can be used in a test to automatically generate an object
 that can act as a test double for the specified original type (interface or 
@@ -25,9 +27,9 @@ class name). This test double object can be used in every context where an
 object of the original type is expected or required.
 
 The createStub($type) and createMock($type) method immediately return a test 
-double object for the specified type (interface or class). The creation of this 
-test double is performed using best practice defaults. The __construct() and 
-__clone() methods of the original class are not executed and the arguments 
+double object for the specified type (interface or class). The creation
+of this test double is performed using best practice defaults. The __construct()
+and __clone() methods of the original class are not executed and the arguments 
 passed to a method of the test double will not be cloned. If these defaults 
 are not what you need then you can use the getMockBuilder($type) method to 
 customize the test double generation using a fluent interface.
@@ -88,15 +90,16 @@ final class StubTest extends TestCase
         $this->assertSame('foo', $stub->doSomething());
     }
 }
-Limitation: Methods named “method”
-
-The example shown above only works when the original class does not declare a method named “method”.
-
-If the original class does declare a method named “method” then $stub->expects($this->any())->method('doSomething')->willReturn('foo'); has to be used.
-
-“Behind the scenes”, PHPUnit automatically generates a new PHP class that implements the desired behavior when the createStub() method is used.
-
-Please note that createStub() will automatically and recursively stub return values based on a method’s return type. Consider the example shown below:
+                    Limitation: Methods named “method”
+The example shown above only works when the original class does not declare
+a method named “method”. If the original class does declare a method named 
+“method” then 
+$stub->expects($this->any())->method('doSomething')->willReturn('foo'); has
+to be used. “Behind the scenes”, PHPUnit automatically generates a new PHP 
+class that implements the desired behavior when the createStub() method is
+used. Please note that createStub() will automatically and recursively stub
+return values based on a method’s return type. Consider the example shown 
+below:
 
 Example 8.3 A method with a return type declaration
 <?php declare(strict_types=1);
@@ -107,13 +110,21 @@ class C
         // Do something.
     }
 }
-In the example shown above, the C::m() method has a return type declaration indicating that this method returns an object of type D. When a test double for C is created and no return value is configured for m() using willReturn() (see above), for instance, then when m() is invoked PHPUnit will automatically create a test double for D to be returned.
+In the example shown above, the C::m() method has a return type declaration
+indicating that this method returns an object of type D. When a test double 
+for C is created and no return value is configured for m() using willReturn()
+(see above), for instance, then when m() is invoked PHPUnit will automatically
+create a test double for D to be returned.
 
-Similarily, if m had a return type declaration for a scalar type then a return value such as 0 (for int), 0.0 (for float), or [] (for array) would be generated.
+Similarily, if m had a return type declaration for a scalar type then a return
+value such as 0 (for int), 0.0 (for float), or [] (for array) would be generated.
 
-Example 8.4 shows an example of how to use the Mock Builder’s fluent interface to configure the creation of the test double. The configuration of this test double uses the same best practice defaults used by createStub().
+Example 8.4 shows an example of how to use the Mock Builder’s fluent interface
+to configure the creation of the test double. The configuration of this test 
+double uses the same best practice defaults used by createStub().
 
-Example 8.4 Using the Mock Builder API can be used to configure the generated test double class
+Example 8.4 Using the Mock Builder API can be used to configure the generated 
+test double class
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
@@ -138,7 +149,9 @@ final class StubTest extends TestCase
         $this->assertSame('foo', $stub->doSomething());
     }
 }
-In the examples so far we have been returning simple values using willReturn($value) – a short syntax for convenience. Table 8.1 shows the available stubbing short hands alongside their longer counterparts.
+In the examples so far we have been returning simple values using 
+willReturn($value) – a short syntax for convenience. Table 8.1 shows the 
+available stubbing short hands alongside their longer counterparts.
 
 Table 8.1 Stubbing short hands
 short hand	longer syntax
@@ -149,9 +162,12 @@ willReturnMap($valueMap)	will($this->returnValueMap($valueMap))
 willReturnOnConsecutiveCalls($value1, $value2)	will($this->onConsecutiveCalls($value1, $value2))
 willReturnSelf()	will($this->returnSelf())
 willThrowException($exception)	will($this->throwException($exception))
-We can use variations on this longer syntax to achieve more complex stubbing behaviour.
+We can use variations on this longer syntax to achieve more complex stubbing 
+behaviour.
 
-Sometimes you want to return one of the arguments of a method call (unchanged) as the result of a stubbed method call. Example 8.5 shows how you can achieve this using returnArgument() instead of returnValue().
+Sometimes you want to return one of the arguments of a method call (unchanged)
+as the result of a stubbed method call. Example 8.5 shows how you can achieve 
+this using returnArgument() instead of returnValue().
 
 Example 8.5 Stubbing a method call to return one of the arguments
 <?php declare(strict_types=1);
@@ -175,7 +191,9 @@ final class StubTest extends TestCase
         $this->assertSame('bar', $stub->doSomething('bar'));
     }
 }
-When testing a fluent interface, it is sometimes useful to have a stubbed method return a reference to the stubbed object. Example 8.6 shows how you can use returnSelf() to achieve this.
+When testing a fluent interface, it is sometimes useful to have a stubbed 
+method return a reference to the stubbed object. Example 8.6 shows how you 
+can use returnSelf() to achieve this.
 
 Example 8.6 Stubbing a method call to return a reference to the stub object
 <?php declare(strict_types=1);
@@ -196,7 +214,10 @@ final class StubTest extends TestCase
         $this->assertSame($stub, $stub->doSomething());
     }
 }
-Sometimes a stubbed method should return different values depending on a predefined list of arguments. You can use returnValueMap() to create a map that associates arguments with corresponding return values. See Example 8.7 for an example.
+Sometimes a stubbed method should return different values depending on a 
+predefined list of arguments. You can use returnValueMap() to create a map 
+that associates arguments with corresponding return values. See Example 8.7 
+for an example.
 
 Example 8.7 Stubbing a method call to return the value from a map
 <?php declare(strict_types=1);
@@ -225,7 +246,10 @@ final class StubTest extends TestCase
         $this->assertSame('h', $stub->doSomething('e', 'f', 'g'));
     }
 }
-When the stubbed method call should return a calculated value instead of a fixed one (see returnValue()) or an (unchanged) argument (see returnArgument()), you can use returnCallback() to have the stubbed method return the result of a callback function or method. See Example 8.8 for an example.
+When the stubbed method call should return a calculated value instead of a 
+fixed one (see returnValue()) or an (unchanged) argument (see returnArgument()),
+you can use returnCallback() to have the stubbed method return the result of 
+a callback function or method. See Example 8.8 for an example.
 
 Example 8.8 Stubbing a method call to return a value from a callback
 <?php declare(strict_types=1);
@@ -246,9 +270,12 @@ final class StubTest extends TestCase
         $this->assertSame('fbzrguvat', $stub->doSomething('something'));
     }
 }
-A simpler alternative to setting up a callback method may be to specify a list of desired return values. You can do this with the onConsecutiveCalls() method. See Example 8.9 for an example.
+A simpler alternative to setting up a callback method may be to specify a 
+list of desired return values. You can do this with the onConsecutiveCalls() 
+method. See Example 8.9 for an example.
 
-Example 8.9 Stubbing a method call to return a list of values in the specified order
+Example 8.9 Stubbing a method call to return a list of values in the specified 
+order
 <?php declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
@@ -269,7 +296,8 @@ final class StubTest extends TestCase
         $this->assertSame(5, $stub->doSomething());
     }
 }
-Instead of returning a value, a stubbed method can also raise an exception. Example 8.10 shows how to use throwException() to do this.
+Instead of returning a value, a stubbed method can also raise an exception. 
+Example 8.10 shows how to use throwException() to do this.
 
 Example 8.10 Stubbing a method call to throw an exception
 <?php declare(strict_types=1);
@@ -290,11 +318,21 @@ final class StubTest extends TestCase
         $stub->doSomething();
     }
 }
-Alternatively, you can write the stub yourself and improve your design along the way. Widely used resources are accessed through a single façade, so you can replace the resource with the stub. For example, instead of having direct database calls scattered throughout the code, you have a single Database object, an implementor of the IDatabase interface. Then, you can create a stub implementation of IDatabase and use it for your tests. You can even create an option for running the tests with the stub database or the real database, so you can use your tests for both local testing during development and integration testing with the real database.
+Alternatively, you can write the stub yourself and improve your design along 
+the way. Widely used resources are accessed through a single façade, so you 
+can replace the resource with the stub. For example, instead of having direct 
+database calls scattered throughout the code, you have a single Database object,
+an implementor of the IDatabase interface. Then, you can create a stub 
+implementation of IDatabase and use it for your tests. You can even create an 
+option for running the tests with the stub database or the real database, so 
+you can use your tests for both local testing during development and integration
+testing with the real database.
 
-Functionality that needs to be stubbed out tends to cluster in the same object, improving cohesion. By presenting the functionality with a single, coherent interface you reduce the coupling with the rest of the system.
+Functionality that needs to be stubbed out tends to cluster in the same object,
+improving cohesion. By presenting the functionality with a single, coherent 
+interface you reduce the coupling with the rest of the system.
 
-Mock Objects
+                                Mock Objects
 The practice of replacing an object with a test double that verifies expectations, for instance asserting that a method has been called, is referred to as mocking.
 
 You can use a mock object “as an observation point that is used to verify the indirect outputs of the SUT as it is exercised. Typically, the mock object also includes the functionality of a test stub in that it must return values to the SUT if it hasn’t already failed the tests but the emphasis is on the verification of the indirect outputs. Therefore, a mock object is a lot more than just a test stub plus assertions; it is used in a fundamentally different way” (Gerard Meszaros).

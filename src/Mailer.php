@@ -8,6 +8,10 @@ class Mailer
 {
     public function sendMessage($email, $message)
     {
+        if (empty($email)) {
+            throw new Exception;
+        }
+
         sleep(1);
 
         echo 'send ' . $message . ' to ' . $email;
