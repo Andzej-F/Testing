@@ -31,4 +31,11 @@ class WrapperTest extends TestCase
         $maxLineLength = 5;
         $this->assertEquals("along\nword", $this->wrapper->wrap($textToBeParsed, $maxLineLength));
     }
+
+    public function testItWrapsAWordSeveralTimesIfItsTooLong()
+    {
+        $textToBeParsed = "averyverylongword";
+        $maxLineLength = 5;
+        $this->assertEquals("avery\nveryl\nongwo\nrd", $this->wrapper->wrap($textToBeParsed, $maxLineLength));
+    }
 }
