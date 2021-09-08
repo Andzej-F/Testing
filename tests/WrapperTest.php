@@ -38,4 +38,18 @@ class WrapperTest extends TestCase
         $maxLineLength = 5;
         $this->assertEquals("avery\nveryl\nongwo\nrd", $this->wrapper->wrap($textToBeParsed, $maxLineLength));
     }
+
+    public function testItWrapsTwoWordsWhenSpaceAtTheEndOfLine()
+    {
+        $textToBeParsed = 'word word';
+        $maxLineLength = 5;
+        $this->assertEquals("word\nword", $this->wrapper->wrap($textToBeParsed, $maxLineLength));
+    }
+
+    public function testItWrapsTwoWordsWhenLineEndIsAfterFirstWord()
+    {
+        $textToBeParsed = 'word word';
+        $maxLineLength = 7;
+        $this->assertEquals("word\nword", $this->wrapper->wrap($textToBeParsed, $maxLineLength));
+    }
 }
