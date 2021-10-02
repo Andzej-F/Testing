@@ -22,6 +22,11 @@ class User1
     public $surname;
 
     /**
+     * Email address
+     * @var string
+     */
+
+    /**
      * Get the user's full name from their first name and surname
      * 
      * @return string The user's full name
