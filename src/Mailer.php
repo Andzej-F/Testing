@@ -1,13 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-use PhpParser\Node\Expr\FuncCall;
-
 /**
  * Mailer
  * 
- * Send messages
+ * Send message
  */
 class Mailer
 {
@@ -21,13 +17,24 @@ class Mailer
      */
     public function sendMessage($email, $message)
     {
-        // if (empty($email)) {
-        //     throw new Exception;
-        // }
+        /* Modification: 1 */
+        // // Use mail() or PHPMailer for example
+        // sleep(3);
 
-        sleep(2);
+        // echo "\n send '$message' to '$email'";
 
-        echo 'send ' . $message . ' to ' . $email;
+        // return true;
+
+
+        /* Modification 2: */
+        if (empty($email)) {
+            throw new Exception();
+        }
+
+        // Use mail() or PHPMailer for example
+        sleep(3);
+
+        echo "\n send '$message' to '$email'";
 
         return true;
     }
